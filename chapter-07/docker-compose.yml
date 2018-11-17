@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+
+  rabbitmqa:
+    image: rabbitmq:3-management
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+      - RABBITMQ_DEFAULT_VHOST=${RABBITMQ_DEFAULT_VHOST}
+    volumes:
+      - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+    expose:
+      - "5672"
+      - "15672"    
+    ports: 
+      - "5675:5672"
+      - "15675:15672"
+
+  rabbitmqb:
+    image: rabbitmq:3-management
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+      - RABBITMQ_DEFAULT_VHOST=${RABBITMQ_DEFAULT_VHOST}
+    volumes:
+      - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf          
+    expose:
+      - "5672"
+      - "15672"
+    ports:
+      - "5676:5672"
+      - "15676:15672"    

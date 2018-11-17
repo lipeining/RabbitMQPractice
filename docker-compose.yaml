@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    expose:
+      - "15672"
+      - "4369"
+      - "5671"
+      - "25672"
+      - "5672"
+    ports:
+      - "4369:4369"
+      - "5671:5671"
+      - "25672:25672"
+      - "5672:5672"
+      - "15672:15672"  
+  postgres:
+    image: postgres:11.1
+    environment:
+      POSTGRES_PASSWORD: duoyi               
