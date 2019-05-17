@@ -130,6 +130,10 @@ vehicleSignal.on('vehicles', function(data)  {
         vehicleSignal.reset();
         // vehicleSignal.pedestrianWaiting();
     } else if(data.status === GREEN) {
+        // 这里是为了在green状态上 handle("pedestrianWaiting")
+        // 首先 machina会保留一份 currentArgs，如果有调用deferUtilTransistion的话，
+        // 会将当前的 currentArgs（包含 handle的事件名），和utilState一个数组
+        // 入队，然后，在trasition的事件，处理queue，达到延时执行的效果
         vehicleSignal.pedestrianWaiting();
     }
 });
