@@ -19,7 +19,8 @@ const message = 'a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w'.split(',');
 function sendMessage() {
     for (let i = 0; i < message.length; i++) {
         setTimeout(function() {
-            exchange.publish('order', JSON.stringify(message[i]), {expiration: "3000"});
+            console.log(`publish ${message[i]}`);
+            exchange.publish('order', JSON.stringify({msg: message[i], counter: 1}), {expiration: "3000"});
         }, 1000);
     }
 }
