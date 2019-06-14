@@ -10,5 +10,6 @@ module.exports = app => {
     router.get('/init', controller.home.init);
     router.get('/optimistic-lock', controller.home.optimisticLock);
     router.get('/exclusive-lock', controller.home.exclusiveLock);
+    router.get('/exclusive-lock-v2', controller.home.exclusiveLockV2);
     router.get('/order', controller.home.order);
 };

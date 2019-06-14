@@ -32,8 +32,8 @@ class HomeController extends Controller {
         ctx.body = {
             code: 0,
             data: {
-                fakeOrderList,
                 fakeOrderLength: fakeOrderList.length,
+                fakeOrderList,
                 fakeTokenList,
             }
         };
@@ -164,6 +164,66 @@ class HomeController extends Controller {
      * @returns {code} 0 正常，3：redis:decr,4:counter<=0,5:unexpected error
      */
     async exclusiveLock() {
+        const { app, ctx } = this;
+        // console.log(app.redis);
+        // console.log(app.redlock);
+        // console.log(app.rabbot);
+        // the string identifier for the resource you want to lock
+        const resource = 'locks:product:322456';
+        // the maximum amount of time you want the resource locked,
+        // keeping in mind that you can extend the lock up until
+        // the point when it expires
+        const ttl = 1000;
+        const redlock = app.redlock;
+        const redis = app.redis;
+        const rabbot = app.rabbot;
+        const resourceCounter = `${resource}:cnt`;
+        try {
+            const lock = await redlock.lock(resource, ttl);
+            const counter = await redis.get(resourceCounter);
+            const body = {};
+            if (Number(counter) > 0) {
+                // ...do something here...
+                const redisRes = await redis.decr(resourceCounter);
+                ctx.logger.info(`redis:decr:${redisRes}`);
+                // unlock your resource when you are done
+                body.redisRes = redisRes;
+                if (redisRes >= 0) {
+                    // 减一之后成功了  
+                    body.code = 0;
+                    const uid = app.uuid();
+                    const shouldPay = Math.random() > 0.5;
+                    if (shouldPay) {
+                        await app.fakeOrder.insert({ uid, resource, number: 1, counter, redisRes });
+                    } else {
+                        await app.fakeToken.insert({ uid, resource, number: 1, counter, redisRes });
+                    }
+                    const rabbotRes = await rabbot.publish('orderEx', this.getPublishBody({ uid, shouldPay, counter, redisRes, resource }));
+                    ctx.logger.info(JSON.stringify(rabbotRes, null, 2));
+                } else {
+                    body.code = 3;
+                    await redis.del(resourceCounter);
+                }
+
+            } else {
+                body.code = 4;
+            }
+            await lock.unlock();
+            body.msg = `counter:${counter}`;
+            ctx.logger.info(`res:${JSON.stringify(body)}`);
+            ctx.body = body;
+        } catch (err) {
+            // we weren't able to reach redis; your lock will eventually
+            // expire, but you probably want to log this error
+            ctx.logger.error(err);
+            ctx.body = { code: 5, err };
+        }
+    }
+    /**
+     * @returns {*}
+     * @returns {code} 0 正常，3：redis:decr,4:counter<=0,5:unexpected error
+     */
+    async exclusiveLockV2() {
         const { app, ctx } = this;
         // console.log(app.redis);
         // console.log(app.redlock);

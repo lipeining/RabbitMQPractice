@@ -36,25 +36,44 @@ describe('test/app/controller/home.test.js', () => {
         ];
         await Promise.all(all);
     });
-    it('should GET /optimistic-lock', async () => {
+    it('should GET /exclusive-lock-v2', async () => {
         await app.httpRequest()
             .get(`/init`)
             .query({ number: 4 })
             .expect(200);
         const all = [
-            app.httpRequest().get('/optimistic-lock'),
-            app.httpRequest().get('/optimistic-lock'),
-            app.httpRequest().get('/optimistic-lock'),
-            app.httpRequest().get('/optimistic-lock'),
-            app.httpRequest().get('/optimistic-lock'),
-            app.httpRequest().get('/optimistic-lock'),
-            app.httpRequest().get('/optimistic-lock'),
-            app.httpRequest().get('/optimistic-lock'),
-            app.httpRequest().get('/optimistic-lock'),
-            app.httpRequest().get('/optimistic-lock'),
+            app.httpRequest().get('/exclusive-lock-v2'),
+            app.httpRequest().get('/exclusive-lock-v2'),
+            app.httpRequest().get('/exclusive-lock-v2'),
+            app.httpRequest().get('/exclusive-lock-v2'),
+            app.httpRequest().get('/exclusive-lock-v2'),
+            app.httpRequest().get('/exclusive-lock-v2'),
+            app.httpRequest().get('/exclusive-lock-v2'),
+            app.httpRequest().get('/exclusive-lock-v2'),
+            app.httpRequest().get('/exclusive-lock-v2'),
+            app.httpRequest().get('/exclusive-lock-v2'),
         ];
         await Promise.all(all);
     });
+    // it('should GET /optimistic-lock', async () => {
+    //     await app.httpRequest()
+    //         .get(`/init`)
+    //         .query({ number: 4 })
+    //         .expect(200);
+    //     const all = [
+    //         app.httpRequest().get('/optimistic-lock'),
+    //         app.httpRequest().get('/optimistic-lock'),
+    //         app.httpRequest().get('/optimistic-lock'),
+    //         app.httpRequest().get('/optimistic-lock'),
+    //         app.httpRequest().get('/optimistic-lock'),
+    //         app.httpRequest().get('/optimistic-lock'),
+    //         app.httpRequest().get('/optimistic-lock'),
+    //         app.httpRequest().get('/optimistic-lock'),
+    //         app.httpRequest().get('/optimistic-lock'),
+    //         app.httpRequest().get('/optimistic-lock'),
+    //     ];
+    //     await Promise.all(all);
+    // });
     it('hold the time', (done) => {
         setTimeout(done, 5000);
     });
