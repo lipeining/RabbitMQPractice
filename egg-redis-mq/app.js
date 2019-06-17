@@ -64,6 +64,43 @@ module.exports = async app => {
                 msg.ack();
             }
         );
+        
+        // 这里处理的是mqDeadQueue的超时消息
+        app.rabbot.handle({
+                queue: "mqDeadQueue", // only handle messages from the queue with this name
+                type: "*", // handle messages with this type name or pattern
+                autoNack: true, // automatically handle exceptions thrown in this handler
+                // context: this,
+                // context: null, // control what `this` is when invoking the handler
+                // handler: null // allows you to just pass the handle function as an option property ... because why not?
+            },
+            async msg => {
+                // 这里处理的是死信队列的消息。一般是超时之后的订单，直接与数据库中的数据对比。
+                // 然后处理counter是否需要+1
+                // app.logger.info('received msg', JSON.stringify(msg.properties.headers, null, 2));
+                // app.logger.info(JSON.stringify(msg.body, null, 2));
+                const body = msg.body;
+                const { uid, shouldPay, counter, redisRes, resource } = body;
+                const resourceCounter = `${resource}:cnt`;
+                const fakeOrder = await app.fakeOrder.find({ uid });
+                app.logger.info(`dead queue get order of ${uid} shouldPay:${shouldPay}`, fakeOrder);
+                // if (!fakeOrder) {
+                //     // 并没有记录
+                //     await app.redis.incr(resourceCounter);
+                // }
+                const fakeToken = await app.fakeToken.find({ uid, resource });
+                app.logger.info(`dead queue get token of ${uid} shouldPay:${shouldPay}`, fakeToken);
+                if (!fakeToken) {
+                    // 并没有记录,说明已经支付了吧
+                } else {
+                    // 有记录。说明，还没支付。可以加一
+                    await app.redis.incr(resourceCounter);
+                }
+                await app.fakeToken.remove({ uid, resource }, { fake: false });
+                msg.ack();
+            }
+        );
+
         app.redlock = new Redlock(
             // you should have one client for each independent redis node
             // or cluster

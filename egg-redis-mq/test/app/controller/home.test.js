@@ -17,44 +17,44 @@ describe('test/app/controller/home.test.js', () => {
             .expect('hi, egg')
             .expect(200);
     });
-    it('should GET /exclusive-lock', async () => {
-        await app.httpRequest()
-            .get(`/init`)
-            .query({ number: 4 })
-            .expect(200);
-        const all = [
-            app.httpRequest().get('/exclusive-lock'),
-            app.httpRequest().get('/exclusive-lock'),
-            app.httpRequest().get('/exclusive-lock'),
-            app.httpRequest().get('/exclusive-lock'),
-            app.httpRequest().get('/exclusive-lock'),
-            app.httpRequest().get('/exclusive-lock'),
-            app.httpRequest().get('/exclusive-lock'),
-            app.httpRequest().get('/exclusive-lock'),
-            app.httpRequest().get('/exclusive-lock'),
-            app.httpRequest().get('/exclusive-lock'),
-        ];
-        await Promise.all(all);
-    });
-    it('should GET /exclusive-lock-v2', async () => {
-        await app.httpRequest()
-            .get(`/init`)
-            .query({ number: 4 })
-            .expect(200);
-        const all = [
-            app.httpRequest().get('/exclusive-lock-v2'),
-            app.httpRequest().get('/exclusive-lock-v2'),
-            app.httpRequest().get('/exclusive-lock-v2'),
-            app.httpRequest().get('/exclusive-lock-v2'),
-            app.httpRequest().get('/exclusive-lock-v2'),
-            app.httpRequest().get('/exclusive-lock-v2'),
-            app.httpRequest().get('/exclusive-lock-v2'),
-            app.httpRequest().get('/exclusive-lock-v2'),
-            app.httpRequest().get('/exclusive-lock-v2'),
-            app.httpRequest().get('/exclusive-lock-v2'),
-        ];
-        await Promise.all(all);
-    });
+    // it('should GET /exclusive-lock', async () => {
+    //     await app.httpRequest()
+    //         .get(`/init`)
+    //         .query({ number: 4 })
+    //         .expect(200);
+    //     const all = [
+    //         app.httpRequest().get('/exclusive-lock'),
+    //         app.httpRequest().get('/exclusive-lock'),
+    //         app.httpRequest().get('/exclusive-lock'),
+    //         app.httpRequest().get('/exclusive-lock'),
+    //         app.httpRequest().get('/exclusive-lock'),
+    //         app.httpRequest().get('/exclusive-lock'),
+    //         app.httpRequest().get('/exclusive-lock'),
+    //         app.httpRequest().get('/exclusive-lock'),
+    //         app.httpRequest().get('/exclusive-lock'),
+    //         app.httpRequest().get('/exclusive-lock'),
+    //     ];
+    //     await Promise.all(all);
+    // });
+    // it('should GET /exclusive-lock-v2', async () => {
+    //     await app.httpRequest()
+    //         .get(`/init`)
+    //         .query({ number: 4 })
+    //         .expect(200);
+    //     const all = [
+    //         app.httpRequest().get('/exclusive-lock-v2'),
+    //         app.httpRequest().get('/exclusive-lock-v2'),
+    //         app.httpRequest().get('/exclusive-lock-v2'),
+    //         app.httpRequest().get('/exclusive-lock-v2'),
+    //         app.httpRequest().get('/exclusive-lock-v2'),
+    //         app.httpRequest().get('/exclusive-lock-v2'),
+    //         app.httpRequest().get('/exclusive-lock-v2'),
+    //         app.httpRequest().get('/exclusive-lock-v2'),
+    //         app.httpRequest().get('/exclusive-lock-v2'),
+    //         app.httpRequest().get('/exclusive-lock-v2'),
+    //     ];
+    //     await Promise.all(all);
+    // });
     // it('should GET /optimistic-lock', async () => {
     //     await app.httpRequest()
     //         .get(`/init`)
@@ -74,7 +74,7 @@ describe('test/app/controller/home.test.js', () => {
     //     ];
     //     await Promise.all(all);
     // });
-    it('hold the time', (done) => {
-        setTimeout(done, 5000);
-    });
+    // it('hold the time', (done) => {
+    //     setTimeout(done, 5000);
+    // });
 });

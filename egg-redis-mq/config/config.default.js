@@ -22,6 +22,11 @@ module.exports = appInfo => {
     const userConfig = {
         // myAppName: 'egg',
     };
+    config.cluster = {
+        listen: {
+            port: 7001,
+        },
+    };
     config.rabbot = {
         client: {
             connection: {
@@ -36,14 +41,22 @@ module.exports = appInfo => {
             exchanges: [
                 { name: 'orderEx', type: 'fanout', autoDelete: false, durable: true },
                 { name: 'orderDead', type: 'fanout', autoDelete: false, durable: true },
+                // 使用rabbitmq来排队的交换器
+                { name: 'mqResourceEx', type: 'topic', autoDelete: false, durable: true },
+                { name: 'mqOrderEx', type: 'topic', autoDelete: false, durable: true },
+                { name: 'mqDeadOrderEx', type: 'fanout', autoDelete: false, durable: true },
             ],
             queues: [
                 { name: 'orderQueue', autoDelete: false, deadLetter: 'orderDead', durable: true, subscribe: true },
                 { name: 'deadQueue', autoDelete: false, durable: true, subscribe: true },
+                // rabbitmq
+                { name: 'mqDeadQueue', autoDelete: false, subscribe: true },
             ],
             bindings: [
                 { exchange: 'orderEx', target: 'orderQueue', keys: [] },
                 { exchange: 'orderDead', target: 'deadQueue', keys: [] },
+                // rabbitmq
+                { exchange: 'mqDeadOrderEx', target: 'mqDeadQueue', keys: [] },
             ],
         },
     };

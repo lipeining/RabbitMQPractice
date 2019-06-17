@@ -4,7 +4,7 @@ const Controller = require('egg').Controller;
 
 class HomeController extends Controller {
     async index() {
-        const { ctx } = this;
+        const { ctx, app } = this;
         ctx.body = 'hi, egg';
     }
     async init() {
@@ -95,7 +95,7 @@ class HomeController extends Controller {
                             await app.fakeToken.insert({ uid, resource, number: 1, counter, redisRes });
                         }
                         const rabbotRes = await rabbot.publish('orderEx', this.getPublishBody({ uid, shouldPay, counter, redisRes, resource }));
-                        ctx.logger.info(JSON.stringify(rabbotRes, null, 2));
+                        // ctx.logger.info(JSON.stringify(rabbotRes, null, 2));
                     } else {
                         // 有一些会失败了。
                         body.code = 3;
@@ -199,7 +199,7 @@ class HomeController extends Controller {
                         await app.fakeToken.insert({ uid, resource, number: 1, counter, redisRes });
                     }
                     const rabbotRes = await rabbot.publish('orderEx', this.getPublishBody({ uid, shouldPay, counter, redisRes, resource }));
-                    ctx.logger.info(JSON.stringify(rabbotRes, null, 2));
+                    // ctx.logger.info(JSON.stringify(rabbotRes, null, 2));
                 } else {
                     body.code = 3;
                     await redis.del(resourceCounter);
@@ -260,7 +260,7 @@ class HomeController extends Controller {
                         await app.fakeToken.insert({ uid, resource, number: 1, counter, redisRes });
                     }
                     const rabbotRes = await rabbot.publish('orderEx', this.getPublishBody({ uid, shouldPay, counter, redisRes, resource }));
-                    ctx.logger.info(JSON.stringify(rabbotRes, null, 2));
+                    // ctx.logger.info(JSON.stringify(rabbotRes, null, 2));
                 } else {
                     body.code = 3;
                     await redis.del(resourceCounter);

@@ -28,6 +28,8 @@ fakeToken指，一个返回成功的用户的token凭证，在另外的http请�
 
 如何动态确定消费者和mqResourceQueue的问题。通过topic吗？但是，谁保证队列和交换器的存在。
 谁保证只有一个消费者。
+一个消费者的话，需要使用多进程模式，
+
   { name: 'mqResourceEx', type: 'topic', autoDelete: false, durable: true },
   { name: 'mqOrderEx', type: 'topic', autoDelete: false, durable: true },
   { name: 'mqDeadOrderEx', type: 'fanout', autoDelete: false, durable: true },
@@ -39,7 +41,7 @@ mqResourceQueue:
 { name: 'mqDeadQueue', autoDelete: false,  subscribe: true },
 rabbot.bindQueue( mqResourceEx, mqResourceQueue, [resourceName], [connectionName] )
 rabbot.bindQueue( mqOrderEx, mqOrderQueue, [resourceName], [connectionName] )
-rabbot.bindQueue( mqDeadOrderEx, mqDeadQueue, [], [connectionName] )
+// rabbot.bindQueue( mqDeadOrderEx, mqDeadQueue, [], [connectionName] ) 这个可以使用configure定义
 并且设置对应的handle方法。
 
 see [egg docs][egg] for more detail.

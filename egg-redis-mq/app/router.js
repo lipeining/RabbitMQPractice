@@ -12,4 +12,9 @@ module.exports = app => {
     router.get('/exclusive-lock', controller.home.exclusiveLock);
     router.get('/exclusive-lock-v2', controller.home.exclusiveLockV2);
     router.get('/order', controller.home.order);
+
+    // rabbitmq
+    router.get('/mq-init', controller.mq.init);
+    router.get('/mq-monitor', controller.mq.monitor);
+    router.get('/mq-lock', controller.mq.lock);
 };
