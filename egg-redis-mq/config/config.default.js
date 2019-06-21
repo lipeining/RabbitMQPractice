@@ -68,6 +68,39 @@ module.exports = appInfo => {
             db: 10,
         }
     };
+    config.kafkaNode = {
+        kafkaHost: 'localhost:9092', // kafka 连接的地址
+        // kafkaHost: 'localhost:9094', // kafka 连接的地址
+        clientOption: {
+
+        }, // KafkaClient 相关配置, 更多配置可以查看kafka-node
+        consumerOption: [{
+            groupId: 'kafkaResource', // consumerGroup 消费组id
+            topics: ['kafkaResourceTopic'], // 同一消费组 consumerGroup 下的所有 topic
+            options: {
+                // fetchMaxWaitMs: 100,
+                // fetchMinBytes: 1,
+                // fetchMaxBytes: 1024 * 1024,
+            }, // 每个消费组对应的相关 consumerGroup 配置
+        }, {
+            groupId: 'kafkaOrder',
+            topics: ['kafkaOrderTopic'],
+            options: {},
+        }],
+        // HighLevelProducer 生产者配置, 更多配置可以查看kafka-node
+        producerOption: {
+            requireAcks: 1,
+            ackTimeoutMs: 100,
+            partitionerType: 2,
+            autoCreateTopic: true, // 是否开启自动创建 topic功能
+            topics: ['kafkaResourceTopic', 'kafkaOrderTopic'], // 所有消费组需要包含的topics 集合
+        },
+        messageOption: {
+            partition: 0,
+            attributes: 0, // 发送消息的相关配置
+        },
+    };
+    config.baseDir = appInfo.baseDir;
     return {
         ...config,
         ...userConfig,

@@ -28,6 +28,7 @@ fakeToken指，一个返回成功的用户的token凭证，在另外的http请�
 
 如何动态确定消费者和mqResourceQueue的问题。通过topic吗？但是，谁保证队列和交换器的存在。
 谁保证只有一个消费者。
+需要使用多核机器进行测试。
 一个消费者的话，需要使用多进程模式，
 
   { name: 'mqResourceEx', type: 'topic', autoDelete: false, durable: true },
@@ -43,6 +44,23 @@ rabbot.bindQueue( mqResourceEx, mqResourceQueue, [resourceName], [connectionName
 rabbot.bindQueue( mqOrderEx, mqOrderQueue, [resourceName], [connectionName] )
 // rabbot.bindQueue( mqDeadOrderEx, mqDeadQueue, [], [connectionName] ) 这个可以使用configure定义
 并且设置对应的handle方法。
+mqResourceEx，主要是检查哨兵，另外发送到mqOrderEx
+mqOrderQueue,主要是检查数据，设置哨兵，写入数据库。
+
+### kafka的队列方式
+1.采取与rabbitmq类似的方法，使用一个排队的topic加上一个订单的topic，中间取一个消费者进行顺序消费，可以设置
+redis的哨兵避免过多流量的涌入
+2.createTopics(topics, cb) 
+topics : [
+  {topic: 'kafkaResourceTopic', partitions: 2, replicationFactor: 2},
+  {topic: 'kafkaOrderTopic', partitions: 5, replicationFactor: 3},
+]
+kafkaResourceTopic的消费者只能有一个，只从一个partition中读取对应数量的offset数据，
+在检验正确之后，设置哨兵。
+同时，将对应的结果再次分发到kafkaOrderTopic中。由broker决定具体是哪些分区。
+kafkaOrderTopic可以设置多个分区，一个消费组，那么组内的消费者会分别消费一个分区，并发处理。
+此时可以写入数据库中。
+
 
 see [egg docs][egg] for more detail.
 

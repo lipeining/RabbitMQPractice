@@ -14,4 +14,8 @@ module.exports = {
         enable: true,
         package: 'egg-redis',
     },
+    kafkaNode: {
+        enable: true,
+        package: 'egg-kafka-node',
+    },
 };

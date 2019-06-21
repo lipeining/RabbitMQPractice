@@ -10,6 +10,7 @@
     "autocannon": "^4.0.0",
     "autocannon-reporter": "0.0.6",
     "egg": "^2.15.1",
+    "egg-kafka-node": "^1.0.3",
     "egg-rabbot": "github:lipeining/egg-rabbot",
     "egg-redis": "^2.3.2",
     "egg-scripts": "^2.11.0",

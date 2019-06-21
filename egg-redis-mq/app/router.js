@@ -17,4 +17,9 @@ module.exports = app => {
     router.get('/mq-init', controller.mq.init);
     router.get('/mq-monitor', controller.mq.monitor);
     router.get('/mq-lock', controller.mq.lock);
+
+    // kafka
+    router.get('/kafka-init', controller.kafka.init);
+    router.get('/kafka-monitor', controller.kafka.monitor);
+    router.get('/kafka-lock', controller.kafka.lock);
 };
