@@ -61,7 +61,10 @@ kafkaResourceTopic的消费者只能有一个，只从一个partition中读取�
 kafkaOrderTopic可以设置多个分区，一个消费组，那么组内的消费者会分别消费一个分区，并发处理。
 此时可以写入数据库中。
 
-
+kafka的监控可以使用
+kafka-manager
+kafka-monitor
+CruiseControl
 see [egg docs][egg] for more detail.
 
 ### Development

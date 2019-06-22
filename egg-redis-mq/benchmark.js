@@ -42,10 +42,26 @@ function exclusiveLockTest({ version = '' }) {
     });
 }
 
-optimisticLockTest();
+// optimisticLockTest();
 // exclusiveLockTest({ version: '' });
 // exclusiveLockTest({ version: 'v2' });
 
+
+function queueLockTest({ version = '', queue = 'mq' }) {
+    const uri = [queue, 'lock', version].filter(item => { return Boolean(item) }).join('-');
+    autocannon(Object.assign(options, { url: `http://localhost:7001/${uri}` }), (err, result) => {
+        console.log(result);
+        result = reporter.buildReport(result); // the html structure
+        const reportOutputPath = path.join(__dirname, `${uri}.html`);
+        reporter.writeReport(result, reportOutputPath, (err, res) => {
+            if (err) console.err('Error writting report: ', err);
+            else console.log('Report written to: ', reportOutputPath);
+        });
+    });
+}
+
+// queueLockTest({ queue: 'mq' });
+queueLockTest({ queue: 'kafka' });
 
 // exclusive-lock
 // {

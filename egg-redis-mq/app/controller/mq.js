@@ -11,7 +11,7 @@ class MQController extends Controller {
         const resourceCounter = `${resource}:cnt`;
         const cnt = query.number || 20;
         await app.redis.set(resourceCounter, cnt);
-        await redis.del(app.fakeToken.parseOptions({ resource }));
+        await app.redis.del(app.fakeToken.parseOptions({ resource }));
         const rabbot = app.rabbot;
         const redis = app.redis;
         const resourceQueue = `${resource}Queue`;
